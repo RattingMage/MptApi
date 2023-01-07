@@ -21,7 +21,7 @@ jobs:
       - name: render config
         run: |
           mkdir deploy
-          cat docker-compose-ci.yaml | envsubst | tail -n +1  > deploy/docker-compose.yaml
+          cat docker-compose-ci.yaml | envsubst > deploy/docker-compose.yaml
       - name: copy files
         uses: appleboy/ssh-action@master
         with:
