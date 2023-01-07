@@ -40,3 +40,4 @@ jobs:
           script: |
             cd test_app
             sudo docker-compose up -d
+            
