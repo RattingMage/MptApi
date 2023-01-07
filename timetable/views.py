@@ -1,11 +1,12 @@
 from django.http import JsonResponse
+from django.shortcuts import redirect
 from rest_framework.views import APIView
 
 from timetable import utils
 
 
 def index(request):
-    return JsonResponse({"status": "ok"}, status=200, safe=True)
+    return redirect('/docs/')
 
 
 class SpecialitiesView(APIView):
