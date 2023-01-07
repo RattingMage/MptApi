@@ -29,6 +29,6 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           password: ${{ secrets.SERVER_PASSWORD }}
           source: "deploy/docker-compose.yaml"
-          target: "mptapi"
+          target: "test_app"
           strip_components: 1
 
