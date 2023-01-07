@@ -19,7 +19,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       - name: render config
-        run: |
+        script: |
           mkdir deploy
           cat docker-compose-ci.yaml | envsubst > deploy/docker-compose.yaml
       - name: copy files
