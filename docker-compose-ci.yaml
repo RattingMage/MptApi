@@ -5,3 +5,4 @@ services:
     image: andrykar/mptapi:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     ports:
       - 8085:21000
+    tty: true
