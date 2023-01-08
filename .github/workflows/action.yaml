@@ -41,5 +41,5 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            cd test_app
+            cd mptapi
             sudo docker-compose up -d

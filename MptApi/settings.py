@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'skyprogram-andrei.ga',
+    '176.62.177.22',
 ]
 
 
