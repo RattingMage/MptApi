@@ -23,12 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-0%$)s+h5f&b8jjg1k&2tr((8drwrpd0guqyigmc&*=8^fw2wu^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
-    'skyprogram-andrei.ga',
-    '176.62.177.22',
-    '0.0.0.0',
+    '*',
 ]
 
 
