@@ -88,4 +88,7 @@ def find_str(stroka):
             'place': Place
         }
     else:
-        return "День не найден"
+        return {
+            'day': "День не найден",
+            'place': "Место не найдено"
+        }

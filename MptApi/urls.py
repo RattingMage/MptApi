@@ -26,6 +26,7 @@ schema_view = get_swagger_view(title='Pastebin API')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', timetable.views.index),
+    path('test', timetable.views.test),
     path('api_schema', get_schema_view(title="api_schema", description="Schema for MptApi"), name="api_schema"),
     path('specialities/', timetable.views.SpecialitiesView.as_view()),
     path('groups/', timetable.views.GroupsView.as_view()),

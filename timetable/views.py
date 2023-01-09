@@ -3,10 +3,18 @@ from django.shortcuts import redirect
 from rest_framework.views import APIView
 
 from timetable import utils
+from .tasks import get_page
 
 
 def index(request):
     return redirect('/docs/')
+
+
+def test(request):
+    get_page.delay()
+    return JsonResponse({
+        'status': 'OK'
+    })
 
 
 class SpecialitiesView(APIView):
