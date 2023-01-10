@@ -6,7 +6,7 @@ services:
     ports:
       - 8085:21000
     volumes:
-      - ./MptApi
+      - ./MptApi:/usr/src/app/
     tty: true
     depends_on:
       - redis
@@ -14,7 +14,7 @@ services:
     build: ./MptApi
     command: celery -A MptApi worker -l info
     volumes:
-      - ./MptApi
+      - ./MptApi:/usr/src/app/
     depends_on:
       - redis
       - app
@@ -22,7 +22,7 @@ services:
     build: ./MptApi
     command: celery -A MptApi beat -l info
     volumes:
-      - ./MptApi
+      - ./MptApi:/usr/src/app/
     depends_on:
       - redis
       - app
