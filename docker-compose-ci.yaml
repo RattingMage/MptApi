@@ -6,3 +6,11 @@ services:
     ports:
       - 8085:21000
     tty: true
+    depends_on:
+      - cache
+  cache:
+    image: redis:latest
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-stack-server
