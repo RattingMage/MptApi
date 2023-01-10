@@ -7,6 +7,23 @@ def get_page(url):
     return BeautifulSoup(page.content, 'lxml')
 
 
+def get_specialities():
+    html = get_page('https://mpt.ru/studentu/raspisanie-zanyatiy/')
+    s_specialities = html.find_all("ul", role="tablist", class_='nav nav-tabs')
+    specialities = s_specialities[0].text.split('\n')
+    for i in range(len(specialities)):
+        try:
+            if specialities[i] == '':
+                specialities.pop(i)
+        except:
+            pass
+    return specialities
+
+
+def get_groups():
+    pass
+
+
 def refact_JSON(untimetable):
     timetable = []
     days = []
