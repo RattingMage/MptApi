@@ -7,8 +7,20 @@ services:
       - 8085:21000
     tty: true
     depends_on:
-      - cache
-  cache:
+      - redis
+  celery:
+    build: ./MptApi
+    command: celery -A MptApi worker -l info
+    depends_on:
+      - redis
+      - app
+  celery-beat:
+    build: ./MptApi
+    command: celery -A MptApi beat -l info
+    depends_on:
+      - redis
+      - app
+  redis:
     image: redis:latest
     restart: always
     ports:
