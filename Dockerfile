@@ -8,5 +8,6 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-ENTRYPOINT ["python3"]
-CMD ["manage.py", "runserver", "0.0.0.0:21000"]
+#ENTRYPOINT ["python3"]
+#CMD ["manage.py", "runserver", "0.0.0.0:21000"]
+ENTRYPOINT ["sh", "entrypoint.sh"]
