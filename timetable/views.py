@@ -24,7 +24,7 @@ def test(request):
 
 class SpecialitiesView(APIView):
     def get(self, request):
-        with redis.Redis(host='0.0.0.0', port=6379, db=0) as redis_client:
+        with redis.Redis(host='redis', port=6379, db=0) as redis_client:
             response = redis_client.lrange("specialities", 0, -1)
 
         for i in range(0, len(response)):
@@ -39,7 +39,7 @@ class GroupsView(APIView):
         speciality = request.GET.get("speciality")
         if speciality == "popuski":
             speciality = "Отделение первого курса"
-        with redis.Redis(host='0.0.0.0', port=6379, db=0) as redis_client:
+        with redis.Redis(host='redis', port=6379, db=0) as redis_client:
             response = redis_client.lrange(f"groups_{speciality}", 0, -1)
         for i in range(0, len(response)):
             response[i] = response[i].decode("utf-8")
@@ -50,7 +50,7 @@ class GroupsView(APIView):
 
 class WeekView(APIView):
     def get(self, request):
-        redis_client = redis.Redis(host='0.0.0.0', port=6379, db=0)
+        redis_client = redis.Redis(host='redis', port=6379, db=0)
         response = {
             'week': redis_client.get(name='week').decode("utf-8"),
             'next': redis_client.get(name='next').decode("utf-8")
@@ -62,7 +62,7 @@ class WeekView(APIView):
 class TimetableViews(APIView):
     def get(self, request):
         number_group = request.GET.get("number_group")
-        with redis.Redis(host='0.0.0.0', port=6379, db=0) as redis_client:
+        with redis.Redis(host='redis', port=6379, db=0) as redis_client:
             response = redis_client.json().get(f"timetable_{number_group}")
 
         return JsonResponse(response, safe=False)
@@ -71,7 +71,7 @@ class TimetableViews(APIView):
 class ReplacementView(APIView):
     def get(self, request):
         number_group = request.GET.get("number_group")
-        with redis.Redis(host='0.0.0.0', port=6379, db=0) as redis_client:
+        with redis.Redis(host='redis', port=6379, db=0) as redis_client:
             response = redis_client.json().get(f"replacement_{number_group}")
 
         if response is None:
