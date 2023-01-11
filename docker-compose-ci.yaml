@@ -11,7 +11,7 @@ services:
     depends_on:
       - redis
   celery:
-    image: celery:5.2.7
+    image: andrykar/mptapi:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     command: celery -A MptApi worker -l info
     volumes:
       - ./MptApi:/usr/src/app
@@ -19,7 +19,7 @@ services:
       - redis
       - app
   celery-beat:
-    image: celery:5.2.7
+    image: andrykar/mptapi:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     command: celery -A MptApi beat -l info
     volumes:
       - ./MptApi:/usr/src/app
