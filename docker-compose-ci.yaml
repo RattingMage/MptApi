@@ -13,16 +13,12 @@ services:
   celery:
     build: ./MptApi
     command: celery -A MptApi worker -l info
-    volumes:
-      - ./MptApi:/usr/src/app/
     depends_on:
       - redis
       - app
   celery-beat:
     build: ./MptApi
     command: celery -A MptApi beat -l info
-    volumes:
-      - ./MptApi:/usr/src/app/
     depends_on:
       - redis
       - app
