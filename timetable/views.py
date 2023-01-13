@@ -70,7 +70,7 @@ class TimetableViews(APIView):
     def get(self, request):
         html = utils.get_page('https://mpt.ru/studentu/raspisanie-zanyatiy/')
         number_group = request.GET.get("number_group")
-        group = html.find("a", string=number_group)
+        group = html.find("a", string=number_group.replace("0", "О"))
         href = group.get('href')
         href = href[1::]
         div = html.find('div', id=href)
@@ -111,7 +111,7 @@ class ReplacementView(APIView):
     def get(self, request):
         number_group = request.GET.get("number_group")
         with redis.Redis(host='redis', port=6379, db=0) as redis_client:
-            response = redis_client.json().get(f"replacement_{number_group}")
+            response = redis_client.json().get(f'replacement_{number_group.replace("0", "О")}')
 
         if response is None:
             return JsonResponse({
