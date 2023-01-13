@@ -81,6 +81,8 @@ def set_timetable():
             except:
                 pass
         for number_group in response:
+            if speciality == "09.02.07":
+                number_group.replace("O", "0")
             group = html.find("a", string=number_group)
             href = group.get('href')
             href = href[1::]
