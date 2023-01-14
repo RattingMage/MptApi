@@ -112,13 +112,7 @@ class ReplacementView(APIView):
     def get(self, request):
         number_group = request.GET.get("number_group")
         with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0) as redis_client:
-            response = redis_client.json().get(f'replacement_{number_group.replace("0", "О")}')
-
-        if response is None:
-            return JsonResponse({
-                "replace": "На этот день нет замен"
-            })
-        else:
+            response = redis_client.json().get(f'replacement_{number_group.upper()}')
             return JsonResponse({
                 "replace": response
             })

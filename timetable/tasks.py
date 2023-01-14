@@ -26,7 +26,10 @@ def set_week():
 def set_specialities():
     specialities = utils.get_specialities()
     with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0) as redis_client:
-        redis_client.rpop("specialities", redis_client.llen("specialities"))
+        try:
+            redis_client.rpop("specialities", redis_client.llen("specialities"))
+        except:
+            pass
         for speciality in specialities:
             redis_client.rpush("specialities", speciality)
 
@@ -54,7 +57,10 @@ def set_groups():
             except:
                 pass
         with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0) as redis_client:
-            redis_client.rpop(f"groups_{speciality}", redis_client.llen(f"groups_{speciality}"))
+            try:
+                redis_client.rpop(f"groups_{speciality}", redis_client.llen(f"groups_{speciality}"))
+            except:
+                pass
             for group in response:
                 redis_client.rpush(f"groups_{speciality}", group)
 
@@ -119,7 +125,10 @@ def set_timetable():
                         dct2 = {}
             reJson = utils.refact_JSON(JSON)
             with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0) as redis_client:
-                redis_client.json().delete(f"timetable_{number_group}")
+                try:
+                    redis_client.json().delete(f"timetable_{number_group}")
+                except:
+                    pass
                 redis_client.json().set(f"timetable_{number_group}", Path.root_path(), reJson)
 
 
@@ -152,7 +161,7 @@ def set_replacement():
             replacement = []
 
             for b in all_b:
-                if number_group == b.text:
+                if number_group.upper() == b.text.upper():
                     table = b.previous_element.previous_element.previous_element.previous_element
 
                     trs = table.findNext('th', class_='lesson-number').previous_element.previous_element.next_siblings
@@ -165,11 +174,19 @@ def set_replacement():
                                 'updatedAt': tr.findNext('td', class_='updated-at').text
                             })
 
-            if replacement is None:
+            if replacement is not None:
                 with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0) as redis_client:
-                    redis_client.json().delete(f"replacement_{number_group}")
-                    redis_client.json().set(f"replacement_{number_group}", Path.root_path(), replacement)
+                    try:
+                        redis_client.json().delete(f"replacement_{number_group.replace('О', '0').upper()}")
+                    except:
+                        pass
+                    redis_client.json().set(f"replacement_{number_group.replace('О', '0').upper()}", Path.root_path(),
+                                            replacement, )
+
             else:
                 with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0) as redis_client:
-                    redis_client.json().delete(f"replacement_{number_group}")
-                    redis_client.json().set(f"replacement_{number_group}", Path.root_path(), "Замен нет")
+                    try:
+                        redis_client.json().delete(f"replacement_{number_group.replace('О', '0').upper()}")
+                    except:
+                        pass
+                    redis_client.json().set(f"replacement_{number_group.replace('О', '0').upper()}", Path.root_path(), "Замен нет")
