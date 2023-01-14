@@ -1,5 +1,6 @@
 import redis as redis
 
+from MptApi import settings
 from MptApi.celery import app
 from redis.commands.json.path import Path
 
@@ -16,7 +17,7 @@ def set_week():
         week = html.find('span', class_='label label-danger').text
         next = "Знаменатель"
 
-    with redis.Redis(host='redis', port=6379, db=0) as redis_client:
+    with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0) as redis_client:
         redis_client.set(name="week", value=week)
         redis_client.set(name="next", value=next)
 
@@ -24,7 +25,7 @@ def set_week():
 @app.task
 def set_specialities():
     specialities = utils.get_specialities()
-    with redis.Redis(host='redis', port=6379, db=0) as redis_client:
+    with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0) as redis_client:
         redis_client.rpop("specialities", redis_client.llen("specialities"))
         for speciality in specialities:
             redis_client.rpush("specialities", speciality)
@@ -52,7 +53,7 @@ def set_groups():
                 response.remove("")
             except:
                 pass
-        with redis.Redis(host='redis', port=6379, db=0) as redis_client:
+        with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0) as redis_client:
             redis_client.rpop(f"groups_{speciality}", redis_client.llen(f"groups_{speciality}"))
             for group in response:
                 redis_client.rpush(f"groups_{speciality}", group)
@@ -117,7 +118,7 @@ def set_timetable():
                         dct = {}
                         dct2 = {}
             reJson = utils.refact_JSON(JSON)
-            with redis.Redis(host='redis', port=6379, db=0) as redis_client:
+            with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0) as redis_client:
                 redis_client.json().delete(f"timetable_{number_group}")
                 redis_client.json().set(f"timetable_{number_group}", Path.root_path(), reJson)
 
@@ -126,6 +127,7 @@ def set_timetable():
 def set_replacement():
     specialities = utils.get_specialities()
     html = utils.get_page('https://mpt.ru/studentu/raspisanie-zanyatiy/')
+    html2 = utils.get_page('https://mpt.ru/studentu/izmeneniya-v-raspisanii/')
     for speciality in specialities:
         response = []
         specs = html.find_all("li", role="presentation")
@@ -145,7 +147,7 @@ def set_replacement():
             except:
                 pass
         for number_group in response:
-            all_b = html.find_all('b')
+            all_b = html2.find_all('b')
 
             replacement = []
 
@@ -164,10 +166,10 @@ def set_replacement():
                             })
 
             if replacement is None:
-                with redis.Redis(host='redis', port=6379, db=0) as redis_client:
+                with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0) as redis_client:
                     redis_client.json().delete(f"replacement_{number_group}")
                     redis_client.json().set(f"replacement_{number_group}", Path.root_path(), replacement)
             else:
-                with redis.Redis(host='redis', port=6379, db=0) as redis_client:
+                with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0) as redis_client:
                     redis_client.json().delete(f"replacement_{number_group}")
-                    redis_client.json().set(f"replacement_{number_group}", Path.root_path(), "На этот замен нет")
+                    redis_client.json().set(f"replacement_{number_group}", Path.root_path(), "Замен нет")
