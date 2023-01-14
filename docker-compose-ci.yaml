@@ -3,6 +3,7 @@ version: '3.3'
 services:
   app:
     image: andrykar/mptapi:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    restart: always
     ports:
       - 8085:21000
     tty: true
@@ -10,18 +11,21 @@ services:
       - redis
   celery:
     image: andrykar/mptapi:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    restart: always
     command: celery -A MptApi worker -l info
     depends_on:
       - redis
       - app
   celery-beat:
     image: andrykar/mptapi:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    restart: always
     command: celery -A MptApi beat -l info
     depends_on:
       - redis
       - app
   redis:
     image: redis/redis-stack-server:latest
+    restart: always
     ports:
       - '6379:6379'
     command: redis-stack-server
