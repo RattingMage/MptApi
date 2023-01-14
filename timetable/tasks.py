@@ -17,7 +17,7 @@ def set_week():
         week = html.find('span', class_='label label-danger').text
         next = "Знаменатель"
 
-    with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0) as redis_client:
+    with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0, password=settings.REDIS_PASS) as redis_client:
         redis_client.set(name="week", value=week)
         redis_client.set(name="next", value=next)
 
@@ -25,7 +25,7 @@ def set_week():
 @app.task
 def set_specialities():
     specialities = utils.get_specialities()
-    with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0) as redis_client:
+    with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0, password=settings.REDIS_PASS) as redis_client:
         try:
             redis_client.rpop("specialities", redis_client.llen("specialities"))
         except:
@@ -56,7 +56,7 @@ def set_groups():
                 response.remove("")
             except:
                 pass
-        with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0) as redis_client:
+        with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0, password=settings.REDIS_PASS) as redis_client:
             try:
                 redis_client.rpop(f"groups_{speciality}", redis_client.llen(f"groups_{speciality}"))
             except:
@@ -124,7 +124,7 @@ def set_timetable():
                         dct = {}
                         dct2 = {}
             reJson = utils.refact_JSON(JSON)
-            with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0) as redis_client:
+            with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0, password=settings.REDIS_PASS) as redis_client:
                 try:
                     redis_client.json().delete(f"timetable_{number_group}")
                 except:
@@ -175,7 +175,7 @@ def set_replacement():
                             })
 
             if replacement is not None:
-                with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0) as redis_client:
+                with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0, password=settings.REDIS_PASS) as redis_client:
                     try:
                         redis_client.json().delete(f"replacement_{number_group.replace('О', '0').upper()}")
                     except:
@@ -184,7 +184,7 @@ def set_replacement():
                                             replacement, )
 
             else:
-                with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0) as redis_client:
+                with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0, password=settings.REDIS_PASS) as redis_client:
                     try:
                         redis_client.json().delete(f"replacement_{number_group.replace('О', '0').upper()}")
                     except:
