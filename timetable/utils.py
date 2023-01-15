@@ -88,21 +88,12 @@ def check_zameny_tech(td):
 
 
 def find_str(stroka):
-    dct = {
-        "ПОНЕДЕЛЬНИК": 1,
-        "ВТОРНИК": 2,
-        "СРЕДА": 3,
-        "ЧЕТВЕРГ": 4,
-        "ПЯТНИЦА": 5,
-        "СУББОТА": 6,
-        "ВОСКРЕСЕНЬЕ": 7,
-    }
     if stroka.find('Нахимовский') != -1:
         i = stroka.find('Нахимовский')
         Day = stroka[:i]
         Place = stroka[i:]
         return {
-            'day': dct[Day],
+            'day': Day.lower().capitalize(),
             'place': Place
         }
     elif stroka.find('Нежинская') != -1:
@@ -110,11 +101,11 @@ def find_str(stroka):
         Day = stroka[:i]
         Place = stroka[i:]
         return {
-            'day': dct[Day],
+            'day': Day.lower().capitalize(),
             'place': Place
         }
     else:
         return {
-            'day': dct[stroka],
+            'day': stroka.lower().capitalize(),
             'place': "Место не найдено"
         }
