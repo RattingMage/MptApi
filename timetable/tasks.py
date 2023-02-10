@@ -88,8 +88,6 @@ def set_timetable():
             except:
                 pass
         for number_group in response:
-            if speciality == "09.02.07":
-                number_group.replace("0", "О")
             group = html.find("a", string=number_group)
             href = group.get('href')
             href = href[1::]
@@ -126,10 +124,10 @@ def set_timetable():
             reJson = utils.refact_JSON(JSON)
             with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0, password=settings.REDIS_PASS) as redis_client:
                 try:
-                    redis_client.json().delete(f'timetable_{number_group.replace("О", "0")}')
+                    redis_client.json().delete(f'timetable_{number_group.replace("O", "0")}')
                 except:
                     pass
-                redis_client.json().set(f'timetable_{number_group.replace("О", "0")}', Path.root_path(), reJson)
+                redis_client.json().set(f'timetable_{number_group.replace("O", "0")}', Path.root_path(), reJson)
 
 
 @app.task
@@ -177,16 +175,16 @@ def set_replacement():
             if replacement is not None:
                 with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0, password=settings.REDIS_PASS) as redis_client:
                     try:
-                        redis_client.json().delete(f"replacement_{number_group.replace('О', '0').upper()}")
+                        redis_client.json().delete(f"replacement_{number_group.replace('O', '0').upper()}")
                     except:
                         pass
-                    redis_client.json().set(f"replacement_{number_group.replace('О', '0').upper()}", Path.root_path(),
+                    redis_client.json().set(f"replacement_{number_group.replace('O', '0').upper()}", Path.root_path(),
                                             replacement, )
 
             else:
                 with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0, password=settings.REDIS_PASS) as redis_client:
                     try:
-                        redis_client.json().delete(f"replacement_{number_group.replace('О', '0').upper()}")
+                        redis_client.json().delete(f"replacement_{number_group.replace('O', '0').upper()}")
                     except:
                         pass
-                    redis_client.json().set(f"replacement_{number_group.replace('О', '0').upper()}", Path.root_path(), "Замен нет")
+                    redis_client.json().set(f"replacement_{number_group.replace('O', '0').upper()}", Path.root_path(), "Замен нет")
