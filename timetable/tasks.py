@@ -126,10 +126,10 @@ def set_timetable():
             reJson = utils.refact_JSON(JSON)
             with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0, password=settings.REDIS_PASS) as redis_client:
                 try:
-                    redis_client.json().delete(f"timetable_{number_group}")
+                    redis_client.json().delete(f'timetable_{number_group.replace("О", "0")}')
                 except:
                     pass
-                redis_client.json().set(f"timetable_{number_group}", Path.root_path(), reJson)
+                redis_client.json().set(f'timetable_{number_group.replace("О", "0")}', Path.root_path(), reJson)
 
 
 @app.task

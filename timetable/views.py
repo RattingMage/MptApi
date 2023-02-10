@@ -65,7 +65,7 @@ class TimetableViews(APIView):
     def get(self, request):
         number_group = request.GET.get("number_group")
         with redis.Redis(host=settings.REDIS_HOST, port=6379, db=0, password=settings.REDIS_PASS) as redis_client:
-            response = redis_client.json().get(f"timetable_{number_group.replace('0', 'О')}")
+            response = redis_client.json().get(f"timetable_{number_group}")
 
         return JsonResponse(response, safe=False)
     # def get(self, request):
