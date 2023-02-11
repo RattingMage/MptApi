@@ -62,7 +62,7 @@ def set_groups():
             except:
                 pass
             for group in response:
-                redis_client.rpush(f"groups_{speciality}", group)
+                redis_client.rpush(f"groups_{speciality}", group.replace("O", "0"))
 
 
 @app.task
